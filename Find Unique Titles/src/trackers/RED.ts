@@ -41,7 +41,7 @@ export default class RED extends AbstractTracker {
   }
 
   canRun(url: string): boolean {
-    return url.includes("redacted.ch");
+    return url.includes("redacted.sh");
   }
 
   async *getSearchRequest(): AsyncGenerator<MetaData | Request, void, void> {
@@ -76,7 +76,7 @@ export default class RED extends AbstractTracker {
           artist = "";
         }
         if (artist) {
-          const queryUrl = `https://redacted.ch/artist.php?artistname=${encodeURIComponent(
+          const queryUrl = `https://redacted.sh/artist.php?artistname=${encodeURIComponent(
             artist
           )}`;
           const result = await fetchAndParseHtml(queryUrl);

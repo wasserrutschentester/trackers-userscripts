@@ -2270,7 +2270,7 @@
           return true;
         }
         canRun(url) {
-          return url.includes("redacted.ch");
+          return url.includes("redacted.sh");
         }
         async* getSearchRequest() {
           yield {
@@ -2291,7 +2291,7 @@
           for (let artist of musicRequest.artists) for (let title of musicRequest.titles) {
             if ("VA" === artist) artist = "";
             if (artist) {
-              const queryUrl = `https://redacted.ch/artist.php?artistname=${encodeURIComponent(artist)}`;
+              const queryUrl = `https://redacted.sh/artist.php?artistname=${encodeURIComponent(artist)}`;
               const result = await (0, common_http__WEBPACK_IMPORTED_MODULE_2__.fetchAndParseHtml)(queryUrl);
               if (result.textContent?.includes("Your search did not match anything.") || result.querySelector("#search_terms")) return _tracker__WEBPACK_IMPORTED_MODULE_0__.SearchResult.NOT_EXIST;
               const torrents = parseTorrents(result);
