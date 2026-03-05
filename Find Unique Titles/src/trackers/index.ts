@@ -24,6 +24,7 @@ import NewInsane from "./NewInsane";
 import PTP from "./PTP";
 import Pter from "./Pter";
 import RED from "./RED";
+import RHD from "./RHD";
 import SC from "./SC";
 import TL from "./TL";
 import TNT from "./TNT";
@@ -59,6 +60,7 @@ export {
   Pter,
   PTP,
   RED,
+  RHD,
   SC,
   TiK,
   TL,

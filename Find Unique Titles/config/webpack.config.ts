@@ -47,6 +47,7 @@ const config: webpack.Configuration = {
     minimizer: [
       new TerserPlugin({
         extractComments: false,
+        exclude: /public\/tmp/,
         terserOptions: {
           compress: {
             dead_code: true,
@@ -71,7 +72,12 @@ const config: webpack.Configuration = {
     ],
   },
   resolve: {
-    extensions: [".ts", ".js", "*.mjs"],
+    extensions: [".ts", ".js", ".mjs"],
+    alias: {
+      // map bare `common/...` imports to the local common build output
+      // use the compiled `dist` so Babel doesn't need to parse upstream TS types
+      common: path.resolve(__dirname, "../../common/dist"),
+    },
   },
   experiments: {
     topLevelAwait: true,

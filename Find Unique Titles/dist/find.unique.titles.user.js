@@ -33,6 +33,7 @@
 // @match https://passthepopcorn.me/torrents.php*
 // @match https://passthepopcorn.me/torrents.php?type=seeding
 // @match https://pterclub.com/torrents.php*
+// @match https://rocket-hd.cc/torrents*
 // @match https://secret-cinema.pw/torrents.php*
 // @match https://tntracker.org/*
 // @match https://www.torrentleech.org/torrents/browse*
@@ -2304,6 +2305,63 @@
         insertTrackersSelect(select) {}
       }
     },
+    "./src/trackers/RHD.ts": (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+      __webpack_require__.d(__webpack_exports__, {
+        default: () => RHD
+      });
+      var _utils_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/utils/utils.ts");
+      var _tracker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/trackers/tracker.ts");
+      var common_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("../common/dist/dom/index.mjs");
+      var common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("../common/dist/http/index.mjs");
+      class RHD extends _tracker__WEBPACK_IMPORTED_MODULE_0__.AbstractTracker {
+        canBeUsedAsSource() {
+          return true;
+        }
+        canBeUsedAsTarget() {
+          return true;
+        }
+        canRun(url) {
+          return url.includes("rocket-hd.cc");
+        }
+        async* getSearchRequest() {
+          let nodes = Array.from(document.querySelectorAll(".torrent-search--list__results tbody tr"));
+          yield {
+            total: nodes.length
+          };
+          for (let element of nodes) {
+            let imdbId = "tt" + element.getAttribute("data-imdb-id");
+            let size = (0, _utils_utils__WEBPACK_IMPORTED_MODULE_1__.parseSize)(element.querySelector(".torrent-search--list__size").textContent);
+            const request = {
+              torrents: [ {
+                size,
+                tags: [],
+                dom: element
+              } ],
+              dom: [ element ],
+              imdbId,
+              title: ""
+            };
+            yield request;
+          }
+        }
+        name() {
+          return "RHD";
+        }
+        async search(request) {
+          if (!request.imdbId) return _tracker__WEBPACK_IMPORTED_MODULE_0__.SearchResult.NOT_CHECKED;
+          const queryUrl = "https://rocket-hd.cc/torrents?perPage=25&imdbId=" + request.imdbId + "&sortField=size";
+          const result = await (0, common_http__WEBPACK_IMPORTED_MODULE_2__.fetchAndParseHtml)(queryUrl);
+          return null !== result.querySelector(".torrent-listings-no-result") ? _tracker__WEBPACK_IMPORTED_MODULE_0__.SearchResult.NOT_EXIST : _tracker__WEBPACK_IMPORTED_MODULE_0__.SearchResult.EXIST;
+        }
+        insertTrackersSelect(select) {
+          select.classList.add("form__select");
+          const wrapper = document.createElement("div");
+          wrapper.classList.add("panel_action");
+          wrapper.appendChild(select);
+          (0, common_dom__WEBPACK_IMPORTED_MODULE_3__.addChild)(document.querySelectorAll(".panel__actions")[0], wrapper);
+        }
+      }
+    },
     "./src/trackers/SC.ts": (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
       __webpack_require__.d(__webpack_exports__, {
         default: () => SC
@@ -2775,11 +2833,12 @@
             PTP: () => _PTP__WEBPACK_IMPORTED_MODULE_25__.default,
             Pter: () => _Pter__WEBPACK_IMPORTED_MODULE_24__.default,
             RED: () => _RED__WEBPACK_IMPORTED_MODULE_26__.default,
-            SC: () => _SC__WEBPACK_IMPORTED_MODULE_27__.default,
-            TL: () => _TL__WEBPACK_IMPORTED_MODULE_29__.default,
-            TNT: () => _TNT__WEBPACK_IMPORTED_MODULE_30__.default,
-            TSeeds: () => _TSeeds__WEBPACK_IMPORTED_MODULE_31__.default,
-            TiK: () => _TiK__WEBPACK_IMPORTED_MODULE_28__.default,
+            RHD: () => _RHD__WEBPACK_IMPORTED_MODULE_27__.default,
+            SC: () => _SC__WEBPACK_IMPORTED_MODULE_28__.default,
+            TL: () => _TL__WEBPACK_IMPORTED_MODULE_30__.default,
+            TNT: () => _TNT__WEBPACK_IMPORTED_MODULE_31__.default,
+            TSeeds: () => _TSeeds__WEBPACK_IMPORTED_MODULE_32__.default,
+            TiK: () => _TiK__WEBPACK_IMPORTED_MODULE_29__.default,
             nCore: () => _nCore__WEBPACK_IMPORTED_MODULE_22__.default
           });
           var _Aither__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/trackers/Aither.ts");
@@ -2808,11 +2867,12 @@
           var _PTP__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__("./src/trackers/PTP.ts");
           var _Pter__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__("./src/trackers/Pter.ts");
           var _RED__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__("./src/trackers/RED.ts");
-          var _SC__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__("./src/trackers/SC.ts");
-          var _TL__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__("./src/trackers/TL.ts");
-          var _TNT__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__("./src/trackers/TNT.ts");
-          var _TSeeds__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__("./src/trackers/TSeeds.ts");
-          var _TiK__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__("./src/trackers/TiK.ts");
+          var _RHD__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__("./src/trackers/RHD.ts");
+          var _SC__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__("./src/trackers/SC.ts");
+          var _TL__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__("./src/trackers/TL.ts");
+          var _TNT__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__("./src/trackers/TNT.ts");
+          var _TSeeds__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__("./src/trackers/TSeeds.ts");
+          var _TiK__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__("./src/trackers/TiK.ts");
           var _nCore__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__("./src/trackers/nCore.ts");
           var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([ _PTP__WEBPACK_IMPORTED_MODULE_25__ ]);
           _PTP__WEBPACK_IMPORTED_MODULE_25__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
